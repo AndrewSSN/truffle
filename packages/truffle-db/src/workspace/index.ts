@@ -1,9 +1,14 @@
 import path from "path";
 
 export { schema } from "./schema";
-import { FSDatabases, MemoryDatabases, SqliteDatabases } from "./pouch";
-import { WorkspaceDatabases } from "./types";
-import { definitions } from "./definitions";
+import {
+  Databases,
+  Collections,
+  FSDatabases,
+  MemoryDatabases,
+  SqliteDatabases
+} from "./pouch";
+import { WorkspaceCollections, definitions } from "./definitions";
 
 export interface WorkspaceConfig {
   workingDirectory?: string;
@@ -13,16 +18,8 @@ export interface WorkspaceConfig {
   };
 }
 
-const getDefaultFSAdapterSettings = workingDirectory => ({
-  directory: path.join(workingDirectory, ".db", "json")
-});
-
-const getDefaultSqliteAdapterSettings = workingDirectory => ({
-  directory: path.join(workingDirectory, ".db", "sqlite")
-});
-
 export class Workspace {
-  public databases: WorkspaceDatabases;
+  public databases: Databases<WorkspaceCollections>;
 
   constructor({
     workingDirectory,
@@ -161,3 +158,11 @@ export class Workspace {
     return contracts.map(({ name }) => name);
   }
 }
+
+const getDefaultFSAdapterSettings = workingDirectory => ({
+  directory: path.join(workingDirectory, ".db", "json")
+});
+
+const getDefaultSqliteAdapterSettings = workingDirectory => ({
+  directory: path.join(workingDirectory, ".db", "sqlite")
+});
